@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<h2>Hello from the humans in DC!</h2>
+
+<div ng-repeat="product in all_products">
+  <p>
+    {{product.name}}: {{product.description}}
+  </p>
+  <img src="{{product.image_path}}" alt="{{product.name}}'s image" />
+
+</div>
