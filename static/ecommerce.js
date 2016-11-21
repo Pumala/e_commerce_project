@@ -1,4 +1,21 @@
-var app = angular.module('e_commerce_app', ['ui.router'])
+var app = angular.module('e_commerce_app', ['ui.router', 'ngCookies'])
+
+app.factory('Flash', function($rootScope, $timeout) {
+  function setMessage(message) {
+    $rootScope.flashMessage = message;
+    $timeout(function() {
+      $rootScope.flashMessage = null;
+    }, 5000);
+  }
+
+  return {
+    setMessage: setMessage
+
+  };
+
+  // Service is called like This
+  // flash.setMessage("Welcome " + somethingFromDatabase + "!");
+});
 
 app.factory("EC_Factory", function($http) {
   var service = {};
@@ -30,6 +47,18 @@ app.factory("EC_Factory", function($http) {
         first_name: signup_data.first_name,
         last_name: signup_data.last_name,
         password: signup_data.password
+      }
+    })
+  }
+
+  service.login = function(login_data) {
+    var url = '/api/user/login';
+    return $http({
+      method: 'POST',
+      url: url,
+      data: {
+        username: login_data.username,
+        password: login_data.password
       }
     })
   }
@@ -81,7 +110,35 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
       })
   }
 
-})
+});
+
+app.controller('LoginController', function($scope, $state, $cookies, EC_Factory, $timeout) {
+
+  $scope.submitLogin = function() {
+    login_data = {
+      username: $scope.username,
+      password: $scope.password
+    }
+    EC_Factory.login(login_data)
+      .success(function(login) {
+        console.log("LOGIN DATA", login);
+        if (login.status === 401) {
+          console.log('HUGE FAIL!');
+          $scope.is_login = true;
+          $timeout(function() {
+            $scope.is_login = false;
+          }, 5000);
+        } else {
+          // store the successful returned response (user data) inside of a cookie
+          $cookies.putObject('cookieDate', login);
+          console.log($cookies.putObject);
+          // $cookie.putObject = ('token', login.auth_token);
+          $state.go('home');
+        }
+      });
+  }
+
+});
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider

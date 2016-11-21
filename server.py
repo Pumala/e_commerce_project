@@ -81,14 +81,14 @@ def api_user_login():
     data = request.get_json()
 
     # get email form user
-    email = data['email']
+    username = data['username']
 
     # get password from user
     password = data['password']
 
     # get encrypted password from the db
     # run a query to grab it
-    query = db.query('select * from customer where email = $1', email).dictresult()[0]
+    query = db.query('select * from customer where username = $1', username).dictresult()[0]
     encrypted_password = query['password']
 
     # and grab id for use later
@@ -101,7 +101,7 @@ def api_user_login():
     if encrypted_password == rehash:
         # generate the authentication token using the uuid module
         token = uuid.uuid4()
-        print "Login success!"
+        print "Login success passwords match!"
         db.insert(
             'auth_token', {
                 'token': token,
@@ -120,6 +120,7 @@ def api_user_login():
                 "auth_token": token
             })
     else:
+        print "Login unsuccessful!!!"
         return jsonify({
             "status": 401,
             "message": "You have failed!"
