@@ -61,7 +61,7 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
 
 });
 
-app.controller('SignUpController', function($scope, $stateParams, EC_Factory) {
+app.controller('SignUpController', function($scope, $stateParams, $state, EC_Factory) {
 
   $scope.submitSignup = function() {
     console.log("Clicked submit button");
@@ -74,9 +74,10 @@ app.controller('SignUpController', function($scope, $stateParams, EC_Factory) {
     }
     console.log("Signup Data is here: ", $scope.signup_data);
     EC_Factory.signup($scope.signup_data)
-      .success(function() {
-        console.log("SIGN UP SUCCESS!");
-
+      .success(function(signup) {
+        // console.log("SIGN UP SUCCESS!");
+        console.log("signup is: ", signup);
+        $state.go('login');
       })
   }
 
@@ -101,6 +102,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/signup',
     templateUrl: 'signup.html',
     controller: 'SignUpController'
+  })
+  .state({
+    name: 'login',
+    url: '/login',
+    templateUrl: 'login.html',
+    controller: 'LoginController'
   })
 
   $urlRouterProvider.otherwise('/');

@@ -72,7 +72,8 @@ def api_user_signup():
             'last_name': last_name
         }
     )
-    return "OKAY!"
+    print "Inserted new customer into DB!"
+    return "Hello"
 
 @app.route('/api/user/login', methods=['POST'])
 def api_user_login():
