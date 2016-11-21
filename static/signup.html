@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<form ng-submit="submitSignup()" action="index.html" method="post">
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input ng-model="username" class="form-control" type="text" name="username" value="">
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input ng-model="email" class="form-control" type="email" name="email" value="">
+  </div>
+  <div class="form-group">
+    <label for="first_name">First Name:</label>
+    <input ng-model="first_name" class="form-control" type="text" name="first_name" value="">
+  </div>
+  <div class="form-group">
+    <label for="last_name">Last Name:</label>
+    <input ng-model="last_name" class="form-control" type="text" name="last_name" value="">
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input ng-model="password" class="form-control" type="password" name="password" value="" required>
+  </div>
+  <div class="form-group">
+    <label for="confirm_password">Confirm Password:</label>
+    <input ng-model="confirm_password" class="form-control" type="password" name="confirm_password" value="" required>
+    <span ng-show="password !== confirm_password"><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i></span>
+  </div>
+  <button class="btn btn-primary btn-block" type="submit" name="button">Submit</button>
+</form>

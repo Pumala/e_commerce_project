@@ -6,6 +6,8 @@
   <p>
     {{product.name}}: {{product.description}}
   </p>
-  <img src="{{product.image_path}}" alt="{{product.name}}'s image" />
+  <a ui-sref="product_details({product_id: product.id})">
+    <img ng-src="{{product.image_path}}" alt="{{product.name}}'s image" />
+  </a>
 
 </div>

@@ -41,8 +41,14 @@ def api_product_details(product_id):
     query = db.query('select * from product where id = $1', product_id).dictresult()[0]
     return jsonify(query)
 
+# @app.route('/api/user/signup')
+# def render_user_signup():
+#     return
+
 @app.route('/api/user/signup', methods=['POST'])
 def api_user_signup():
+    print "Shipping over form values from signup form: "
+    print request.get_json
 
     username = request.get_json()['username']
     email = request.get_json()['email']
@@ -66,7 +72,7 @@ def api_user_signup():
             'last_name': last_name
         }
     )
-    return redirect('/')
+    return "OKAY!"
 
 @app.route('/api/user/login', methods=['POST'])
 def api_user_login():
