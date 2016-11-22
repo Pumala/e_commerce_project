@@ -130,16 +130,20 @@ def api_user_login():
 def api_shopping_cart():
     # grab the user's token and product info using request
     results = request.get_json()
+    print "Results information: %s" % results
 
     # grab customer id from results
     customer_id = results['customer_id']
+    print "Customer ID information: %s" % customer_id
+
 
     # user can only have access to shopping cart if token exists
     token = results['auth_token']
+    print "Token information: %s" % token
 
     # if token doesn't exist, return "FAIL"
     if not token:
-        return "Login failed", 403
+        return "Cannot access shopping cart", 403
     # else, continue on if token is a match
     else:
         # grab the user and product info using request
@@ -159,65 +163,165 @@ def api_shopping_cart():
 @app.route('/api/shopping_cart')
 def shopping_cart():
 
-    # hardcode customer_id for now
-    customer_id = 11
+    # print "Request args getting!! %s" % request.args.get()
 
-    # run a query to grab all the products in the shopping cart that belong to the customer
-    query = db.query('select * from customer, product_in_shopping_cart, product where customer.id = product_in_shopping_cart.customer_id and product_in_shopping_cart.product_id = product.id and customer.id = $1', customer_id).dictresult()
+    # grab the user's token and product info using request
+    print "Request args %s" % request.args
 
-    print "Printing the query for shopping cart..."
-    print query
+    token = request.args.get('auth_token')
+    print "Results information: %s" % token
 
-    return jsonify(query)
+    # grab customer id from results
+    # customer_id = results['customer_id']
+    # print "Customer ID information: %s" % customer_id
+
+
+    # user can only have access to shopping cart if token exists
+    # token = results['auth_token']
+    # print "Token information: %s" % token
+
+    # if token doesn't exist, return "FAIL"
+    if not token:
+        return "Cannot access shopping cart", 403
+    else:
+        customer_id = db.query('select customer_id from auth_token where token = $1', token).namedresult()[0].customer_id
+        print "Customer ID: %s", customer_id
+        # run a query to grab all the products in the shopping cart that belong to the customer
+        shopping_cart_products = db.query('select * from customer, product_in_shopping_cart, product where customer.id = product_in_shopping_cart.customer_id and product_in_shopping_cart.product_id = product.id and customer.id = $1', customer_id).dictresult()
+        print "Printing the shopping_cart_products information..."
+        print shopping_cart_products
+
+        print "Length of query: "
+        print len(shopping_cart_products)
+
+        total_price = 0;
+        # loop through the items and add each item's price to get the total price
+        for item in range(0, len(shopping_cart_products)):
+            total_price += shopping_cart_products[item]['price']
+
+        print "Total Price: "
+        print total_price
+
+        return jsonify({
+            'shopping_cart_products': shopping_cart_products,
+            'total_price': total_price
+        })
 
 @app.route('/api/shopping_cart/checkout', methods=['POST'])
 def api_checkout():
 
-    # hardcode customer_id for now
-    customer_id = 11
+    results = request.get_json()
+    # if results['shipping_info'] == None
 
-    # run a query to grab all the products in the shopping cart that belong to the customer
-    query = db.query('select * from customer, product_in_shopping_cart, product where customer.id = product_in_shopping_cart.customer_id and product_in_shopping_cart.product_id = product.id and customer.id = $1', customer_id).dictresult()
+    print "Results information: %s" % results
 
-    print "Length of query: "
-    print len(query)
+    # grab the user's token using request
+    token = results['auth_token']
+    print "TOKEN information: %s" % token
 
-    total_price = 0;
-    # loop through the items and add each item's price to get the total price
-    for item in range(0, len(query)):
-        total_price += query[item]['price']
+    # grab customer id from results
+    # customer_id = results['customer_id']
+    # print "Customer ID information: %s" % customer_id
 
-    print "Total Price: "
-    print total_price
 
-    db.insert(
-        'purchase',
-        {
-            'customer_id': customer_id,
-            'total_price': total_price
-        }
-    );
+    # user can only have access to shopping cart if token exists
+    # token = results['auth_token']
+    # print "Token information: %s" % token
 
-    # run a query to grab all the product_id and purchase_id neccessary for next step
-    newQuery = db.query('select product_id, purchase.id as purchase_id from product_in_shopping_cart, purchase where product_in_shopping_cart.customer_id = purchase.customer_id and purchase.customer_id = $1', customer_id).dictresult()
+    # if token doesn't exist, return "FAIL"
+    if not token:
+        return "Cannot access shopping cart", 403
+    else:
+        customer_id = db.query('select customer_id from auth_token where token = $1', token).namedresult()[0].customer_id
+        print "Customer ID: %s", customer_id
+        # run a query to grab all the products in the shopping cart that belong to the customer
+        shopping_cart_products = db.query('select * from customer, product_in_shopping_cart, product where customer.id = product_in_shopping_cart.customer_id and product_in_shopping_cart.product_id = product.id and customer.id = $1', customer_id).dictresult()
+        print "Printing the shopping_cart_products information..."
+        print shopping_cart_products
 
-    # run a loop and insert the pair (product_id and purchase_id) into product_in_purchase table
-    for item in newQuery:
-        print "Item in newQuery: "
-        print item
-        db.insert(
-            'product_in_purchase',
-            {
-                'product_id': item['product_id'],
-                'purchase_id': item['purchase_id']
-            }
+        print "Length of query: "
+        print len(shopping_cart_products)
+
+        total_price = 0;
+        # loop through the items and add each item's price to get the total price
+        for item in range(0, len(shopping_cart_products)):
+            total_price += shopping_cart_products[item]['price']
+
+        print "Total Price: "
+        print total_price
+
+        purchase_id = db.query(
+        """
+            INSERT INTO
+                purchase(
+                    customer_id,
+                    total_price,
+                    address,
+                    address_line_2,
+                    city,
+                    state,
+                    zip_code
+                )
+            VALUES
+                ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING id;
+        """, (
+                customer_id,
+                total_price,
+                results['shipping_info']['address'],
+                results['shipping_info']['address_line_2'],
+                results['shipping_info']['city'],
+                results['shipping_info']['state'],
+                results['shipping_info']['zip_code']
+            )
         )
+        purchase_id = purchase_id.namedresult()[0].id
 
-    # delete all the items in the customer's shopping cart
-    db.query('delete from product_in_shopping_cart where customer_id = $1', customer_id)
+        # db.insert(
+        #     'purchase', {
+        #         'customer_id': customer_id,
+        #         'total_price': total_price,
+        #         'address': results['shipping_info']['address'],
+        #         'address_line_2': results['shipping_info']['address_line_2'],
+        #         'city': results['shipping_info']['city'],
+        #         'state': results['shipping_info']['state'],
+        #         'zip_code': results['shipping_info']['zip_code']
+        #     }
+        # )
 
-    return "OKAY!"
+        # run a query to grab all the product_id and purchase_id neccessary for next step
+        productIdQuery = db.query("""
+            select
+                product_id,
+                purchase.id as purchase_id
+            from
+                product_in_shopping_cart,
+                purchase
+            where
+                product_in_shopping_cart.customer_id = purchase.customer_id and
+                purchase.customer_id = $1
+            """,
+            customer_id).dictresult()
 
+        # run a loop and insert the pair (product_id and purchase_id) into product_in_purchase table
+        for item in productIdQuery:
+            print "Item in productIdQuery: "
+            print item
+            db.insert(
+                'product_in_purchase',
+                {
+                    'product_id': item['product_id'],
+                    'purchase_id': purchase_id
+                }
+            )
+
+        # delete all the items in the customer's shopping cart
+        db.query('delete from product_in_shopping_cart where customer_id = $1', customer_id)
+
+        return jsonify({
+            'shopping_cart_products': shopping_cart_products,
+            'total_price': total_price
+        })
 
 
 

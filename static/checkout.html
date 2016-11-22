@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<h1>Check Out</h1>
+
+<h2>Ship To:</h2>
+<form class="">
+  <div class="form-group">
+    <label for="address">Address:</label>
+    <input ng-model="address" class="form-control" type="text" name="address" value="">
+  </div>
+  <div class="form-group">
+    <label for="address_line_2">Address Line 2:</label>
+    <input ng-model="address_line_2" class="form-control" type="text" name="address_line_2" value="">
+  </div>
+  <div class="form-group">
+    <label for="city">City:</label>
+    <input ng-model="city" class="form-control" type="text" name="city" value="">
+  </div>
+  <div class="form-group">
+    <label for="state">State:</label>
+    <input ng-model="state" class="form-control" type="text" name="state" value="">
+  </div>
+  <div class="form-group">
+    <label for="zip_code">Zip Code:</label>
+    <input ng-model="zip_code" class="form-control" type="text" name="zip_code" value="">
+  </div>
+</form>
+
+<h2>Your Order</h2>
+
+<ul ng-repeat="product in shopping_cart">
+  <li>{{product.name}} - ${{product.price}}</li>
+</ul>
+
+<p>
+  Total Price: ${{total_price}}
+</p>
+<hr>
+<button ng-click="checkout()" class="btn btn-primary" name="button">Confirm Checkout</button>

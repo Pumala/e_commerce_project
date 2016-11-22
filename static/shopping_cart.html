@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<h1>Hello from the shopping_cart.html file</h1>
+
+<div ng-repeat="product in shopping_cart" class="well">
+  <img ng-src="{{product.image_path}}" alt="" />
+  {{product.name}}<br>
+  {{product.price}}
+</div>
+
+<p>
+  Total Price: {{total_price}}
+</p>
+
+<a ui-sref="checkout" class="btn btn-primary" name="button">Checkout</a>

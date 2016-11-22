@@ -44,35 +44,6 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
     $rootScope.user_info = null;
   }
 
-  service.listAllProducts = function() {
-    var url = '/api/products';
-    return $http({
-      method: "GET",
-      url: url
-    });
-  }
-
-  service.product_details = function(product_id) {
-    var url = '/api/product/' + product_id;
-    return $http({
-      method: "GET",
-      url: url
-    });
-  }
-
-  service.addToCart = function(product_id) {
-    var url = '/api/shopping_cart';
-    return $http({
-      method: "POST",
-      url: url,
-      data: {
-        auth_token: $rootScope.authToken,
-        customer_id: $rootScope.user_info["id"],
-        product_id: product_id
-      }
-    });
-  }
-
   service.signup = function(signup_data) {
     var url = '/api/user/signup';
     return $http({
@@ -98,6 +69,74 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
         password: login_data.password
       }
     })
+  }
+
+  service.listAllProducts = function() {
+    var url = '/api/products';
+    return $http({
+      method: "GET",
+      url: url
+    });
+  }
+
+  service.product_details = function(product_id) {
+    var url = '/api/product/' + product_id;
+    return $http({
+      method: "GET",
+      url: url
+    });
+  }
+
+  service.addToCart = function(product_id) {
+    var url = '/api/shopping_cart';
+    console.log("Token:", $cookies.getObject('cookieData').auth_token);
+    console.log("Product ID:", product_id);
+    console.log("user info:", $cookies.getObject('cookieData').user["id"]);
+    return $http({
+      method: "POST",
+      url: url,
+      data: {
+        auth_token: $cookies.getObject('cookieData').auth_token,
+        customer_id: $cookies.getObject('cookieData').user["id"],
+        product_id: product_id
+      }
+    });
+  }
+
+  service.getShoppingCart = function() {
+    console.log("Inside service shopping cart");
+    console.log("Token:", $cookies.getObject('cookieData').auth_token);
+    var url = '/api/shopping_cart';
+    return $http({
+      method: "GET",
+      url: url,
+      params: {
+        auth_token: $cookies.getObject('cookieData').auth_token
+      }
+    });
+  }
+
+  service.getOrderInfo = function(shippingInfo) {
+    var url = '/api/shopping_cart';
+    return $http({
+      method: "GET",
+      url: url,
+      params: {
+        auth_token: $cookies.getObject('cookieData').auth_token
+      }
+    });
+  }
+
+  service.getCheckout = function(shippingInfo) {
+    var url = "/api/shopping_cart/checkout";
+    return $http({
+      method: "POST",
+      url: url,
+      data: {
+        auth_token: $cookies.getObject('cookieData').auth_token,
+        shipping_info: shippingInfo
+      }
+    });
   }
 
   return service;
@@ -161,11 +200,11 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
 app.controller('LoginController', function($scope, $state, $cookies, $rootScope, EC_Factory, $timeout) {
 
   $scope.submitLogin = function() {
-    login_data = {
+    $scope.login_data = {
       username: $scope.username,
       password: $scope.password
     }
-    EC_Factory.login(login_data)
+    EC_Factory.login($scope.login_data)
       .success(function(login) {
         console.log("LOGIN DATA", login);
         if (login.status === 401) {
@@ -179,9 +218,48 @@ app.controller('LoginController', function($scope, $state, $cookies, $rootScope,
           $cookies.putObject('cookieData', login);
           // store user information in a $rootScope variable
           $rootScope.user_info = login['user'];
+          // store token information in a $rootScope variable
+          $rootScope.authToken = login['auth_token'];
           // redirect to home page
           $state.go('home');
         }
+      });
+  }
+
+});
+
+app.controller('ShoppingCartController', function($scope, $state, $cookies, $rootScope, EC_Factory) {
+  EC_Factory.getShoppingCart()
+    .success(function(shopping_cart) {
+      console.log(shopping_cart);
+      $scope.shopping_cart = shopping_cart.shopping_cart_products;
+      $scope.total_price = shopping_cart.total_price
+    });
+});
+
+app.controller('CheckoutController', function($scope, $state, $cookies, $rootScope, EC_Factory) {
+
+  EC_Factory.getOrderInfo($scope.shipping_info)
+    .success(function(shopping_cart) {
+      console.log("We checked out!");
+      $scope.shopping_cart = shopping_cart.shopping_cart_products;
+      $scope.total_price = shopping_cart.total_price
+    });
+
+  $scope.checkout = function() {
+    // initialize $scope.address_line_2 to nothing otherwise it will be sent as undefined and this will cause an issue when trying to insert information into the database
+    $scope.address_line_2 = ""
+    $scope.shipping_info = {
+      address: $scope.address,
+      address_line_2: $scope.address_line_2,
+      city: $scope.city,
+      state: $scope.state,
+      zip_code: $scope.zip_code,
+    };
+    EC_Factory.getCheckout($scope.shipping_info)
+      .success(function(shopping_cart) {
+        console.log("We checked out and are going to the thank you page!");
+        $state.go('thanks');
       });
   }
 
@@ -212,6 +290,23 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/login',
     templateUrl: 'login.html',
     controller: 'LoginController'
+  })
+  .state({
+    name: 'shopping_cart',
+    url: '/shopping_cart',
+    templateUrl: 'shopping_cart.html',
+    controller: 'ShoppingCartController'
+  })
+  .state({
+    name: 'checkout',
+    url: '/checkout',
+    templateUrl: 'checkout.html',
+    controller: 'CheckoutController'
+  })
+  .state({
+    name: 'thanks',
+    url: '/thanks',
+    templateUrl: 'thanks.html'
   })
 
   $urlRouterProvider.otherwise('/');
