@@ -16,13 +16,13 @@ db = pg.DB(
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('e_commerce_pro', static_url_path='', template_folder=tmp_dir)
 
-def token_check(customer_id):
-    # customer_id = 4
-    token = db.query("select token from auth_token where customer_id = $1", customer_id).dictresult()
-    if (token):
-        return jsonify(token)
-    else:
-        return 403
+# def token_check(customer_id):
+#     # customer_id = 4
+#     token = db.query("select token from auth_token where customer_id = $1", customer_id).dictresult()
+#     if (token):
+#         return jsonify(token)
+#     else:
+#         return 403
 
 @app.route('/')
 def home():
@@ -128,17 +128,17 @@ def api_user_login():
 
 @app.route('/api/shopping_cart', methods=['POST'])
 def api_shopping_cart():
-    # grab the user and product info using request
+    # grab the user's token and product info using request
     results = request.get_json()
 
-    customer_id = results['id']
+    # grab customer id from results
+    customer_id = results['customer_id']
 
     # user can only have access to shopping cart if token exists
-    # make a token check
-    token = token_check(customer_id)
+    token = results['auth_token']
 
     # if token doesn't exist, return "FAIL"
-    if token == 403:
+    if not token:
         return "Login failed", 403
     # else, continue on if token is a match
     else:

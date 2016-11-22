@@ -16,8 +16,11 @@
   {{product_details.price}}
 </p>
 
-<div class="">
-  <button class="btn btn-primary">
+<div ng-show="user_info" class="">
+  <button ng-click="addProduct(product_details.id)" class="btn btn-primary">
     Add to Cart
   </button>
+</div>
+<div ng-hide="user_info" class="">
+  <h3>Please log in to buy this product</h3>
 </div>

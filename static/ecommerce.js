@@ -49,7 +49,7 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
     return $http({
       method: "GET",
       url: url
-    })
+    });
   }
 
   service.product_details = function(product_id) {
@@ -57,7 +57,20 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
     return $http({
       method: "GET",
       url: url
-    })
+    });
+  }
+
+  service.addToCart = function(product_id) {
+    var url = '/api/shopping_cart';
+    return $http({
+      method: "POST",
+      url: url,
+      data: {
+        auth_token: $rootScope.authToken,
+        customer_id: $rootScope.user_info["id"],
+        product_id: product_id
+      }
+    });
   }
 
   service.signup = function(signup_data) {
@@ -72,7 +85,7 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
         last_name: signup_data.last_name,
         password: signup_data.password
       }
-    })
+    });
   }
 
   service.login = function(login_data) {
@@ -110,6 +123,13 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
       console.log("Product details Name: ", product_details.name);
       $scope.product_details = product_details;
     })
+
+  $scope.addProduct  = function(product_id) {
+    EC_Factory.addToCart(product_id)
+      .success(function(addedToCart) {
+        console.log(addedToCart);
+      });
+  }
 
 });
 
