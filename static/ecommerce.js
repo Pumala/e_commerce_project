@@ -17,9 +17,32 @@ app.factory('Flash', function($rootScope, $timeout) {
   // flash.setMessage("Welcome " + somethingFromDatabase + "!");
 });
 
-app.factory("EC_Factory", function($http) {
+app.factory("EC_Factory", function($http, $cookies, $rootScope) {
   var service = {};
-  var authToken = null;
+  $rootScope.factoryCookieData = null;
+  console.log("Printing initial cookie", $rootScope.factoryCookieData);
+  // cookie data gets passed into the factory
+  $rootScope.factoryCookieData = $cookies.getObject('cookieData');
+  console.log("Printing initial cookie", $rootScope.factoryCookieData);
+
+  console.log("I am inside the factory!");
+  if ($rootScope.factoryCookieData) {
+    console.log("I am a cookie data in the factory!");
+    // grab auth_token from the cookieData
+    $rootScope.authToken = $rootScope.factoryCookieData.auth_token;
+    // grab user information from cookieData
+    $rootScope.user_info = $rootScope.factoryCookieData.user;
+  }
+
+  $rootScope.logout = function() {
+    console.log("Entered the logout function");
+    // remove method => pass in the value of the cookie data you want to remove
+    $cookies.remove('cookieData');
+    // reset all the scope variables
+    $rootScope.factoryCookieData = null;
+    $rootScope.authToken = null;
+    $rootScope.user_info = null;
+  }
 
   service.listAllProducts = function() {
     var url = '/api/products';
@@ -64,14 +87,6 @@ app.factory("EC_Factory", function($http) {
     })
   }
 
-  service.storeAuthToken = function(token) {
-    authToken = token;
-  }
-
-  service.returnAuthToken = function() {
-    return authToken;
-  }
-
   return service;
 
 });
@@ -94,7 +109,6 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
       console.log("Product details: ", product_details);
       console.log("Product details Name: ", product_details.name);
       $scope.product_details = product_details;
-      // $state.go('product_details', { product_id: $scope.product_id })
     })
 
 });
@@ -103,6 +117,7 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
 
   $scope.submitSignup = function() {
     console.log("Clicked submit button");
+    // store user signup info in a scope object
     $scope.signup_data = {
       username: $scope.username,
       email: $scope.email,
@@ -111,10 +126,12 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
       password: $scope.password
     }
     console.log("Signup Data is here: ", $scope.signup_data);
+    // pass the user signup data object to be processed
     EC_Factory.signup($scope.signup_data)
       .success(function(signup) {
         // console.log("SIGN UP SUCCESS!");
         console.log("signup is: ", signup);
+        // redirect to login page for new user to login after being added to db
         $state.go('login');
       })
   }
@@ -140,12 +157,9 @@ app.controller('LoginController', function($scope, $state, $cookies, $rootScope,
         } else {
           // store the successful returned response (user data) inside of a cookie
           $cookies.putObject('cookieData', login);
-          $scope.authToken = login['auth_token'];
-          // store auth token in the factory
-          EC_Factory.storeAuthToken($scope.authToken);
           // store user information in a $rootScope variable
           $rootScope.user_info = login['user'];
-          console.log("RootScope: ", $rootScope.user_info);
+          // redirect to home page
           $state.go('home');
         }
       });
