@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.5.9-build.5149+sha.991a2b3
+ * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -28,7 +28,7 @@ angular.module('ngCookies', ['ng']).
    * @description
    * Use `$cookiesProvider` to change the default behavior of the {@link ngCookies.$cookies $cookies} service.
    * */
-   provider('$cookies', [/** @this */function $CookiesProvider() {
+   provider('$cookies', [function $CookiesProvider() {
     /**
      * @ngdoc property
      * @name $cookiesProvider#defaults
@@ -51,16 +51,6 @@ angular.module('ngCookies', ['ng']).
      * Note: By default, the address that appears in your `<base>` tag will be used as the path.
      * This is important so that cookies will be visible for all routes when html5mode is enabled.
      *
-     * @example
-     *
-     * ```js
-     * angular.module('cookiesProviderExample', ['ngCookies'])
-     *   .config(['$cookiesProvider', function($cookiesProvider) {
-     *     // Setting default options
-     *     $cookiesProvider.defaults.domain = 'foo.com';
-     *     $cookiesProvider.defaults.secure = true;
-     *   }]);
-     * ```
      **/
     var defaults = this.defaults = {};
 
@@ -194,8 +184,6 @@ angular.module('ngCookies').
  * @ngdoc service
  * @name $cookieStore
  * @deprecated
- * Please use the {@link ngCookies.$cookies `$cookies`} service instead.
- *
  * @requires $cookies
  *
  * @description
@@ -204,6 +192,11 @@ angular.module('ngCookies').
  * deserialized by angular's toJson/fromJson.
  *
  * Requires the {@link ngCookies `ngCookies`} module to be installed.
+ *
+ * <div class="alert alert-danger">
+ * **Note:** The $cookieStore service is **deprecated**.
+ * Please use the {@link ngCookies.$cookies `$cookies`} service instead.
+ * </div>
  *
  * @example
  *
@@ -306,9 +299,9 @@ function $$CookieWriter($document, $log, $browser) {
     // - 4096 bytes per cookie
     var cookieLength = str.length + 1;
     if (cookieLength > 4096) {
-      $log.warn('Cookie \'' + name +
-        '\' possibly not set or overflowed because it was too large (' +
-        cookieLength + ' > 4096 bytes)!');
+      $log.warn("Cookie '" + name +
+        "' possibly not set or overflowed because it was too large (" +
+        cookieLength + " > 4096 bytes)!");
     }
 
     return str;
@@ -321,7 +314,7 @@ function $$CookieWriter($document, $log, $browser) {
 
 $$CookieWriter.$inject = ['$document', '$log', '$browser'];
 
-angular.module('ngCookies').provider('$$cookieWriter', /** @this */ function $$CookieWriterProvider() {
+angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterProvider() {
   this.$get = $$CookieWriter;
 });
 

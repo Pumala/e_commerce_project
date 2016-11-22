@@ -1,3 +1,15 @@
+nav {
+  background-color: slateblue;
+}
+
+nav a {
+  color: #fff;
+}
+
+nav span {
+  color: #fff;
+}
+
 .fa-exclamation-circle {
   color: red;
 }

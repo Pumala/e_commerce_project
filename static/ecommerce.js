@@ -19,6 +19,7 @@ app.factory('Flash', function($rootScope, $timeout) {
 
 app.factory("EC_Factory", function($http) {
   var service = {};
+  var authToken = null;
 
   service.listAllProducts = function() {
     var url = '/api/products';
@@ -61,6 +62,14 @@ app.factory("EC_Factory", function($http) {
         password: login_data.password
       }
     })
+  }
+
+  service.storeAuthToken = function(token) {
+    authToken = token;
+  }
+
+  service.returnAuthToken = function() {
+    return authToken;
   }
 
   return service;
@@ -112,7 +121,7 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
 
 });
 
-app.controller('LoginController', function($scope, $state, $cookies, EC_Factory, $timeout) {
+app.controller('LoginController', function($scope, $state, $cookies, $rootScope, EC_Factory, $timeout) {
 
   $scope.submitLogin = function() {
     login_data = {
@@ -130,9 +139,13 @@ app.controller('LoginController', function($scope, $state, $cookies, EC_Factory,
           }, 5000);
         } else {
           // store the successful returned response (user data) inside of a cookie
-          $cookies.putObject('cookieDate', login);
-          console.log($cookies.putObject);
-          // $cookie.putObject = ('token', login.auth_token);
+          $cookies.putObject('cookieData', login);
+          $scope.authToken = login['auth_token'];
+          // store auth token in the factory
+          EC_Factory.storeAuthToken($scope.authToken);
+          // store user information in a $rootScope variable
+          $rootScope.user_info = login['user'];
+          console.log("RootScope: ", $rootScope.user_info);
           $state.go('home');
         }
       });
