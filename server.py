@@ -220,6 +220,15 @@ def api_checkout():
     if not token:
         return "Cannot access shopping cart", 403
     else:
+
+        # grab the user's payment's token
+        stripe_token = results['stripe_token']['id']
+        print "STRIPE TOKEN ID %s", stripe_token
+
+        # grab the user's payment's token
+        stripe_email = results['stripe_token']['email']
+        print "STRIPE TOKEN EMAIL %s", stripe_email
+
         customer_id = db.query('select customer_id from auth_token where token = $1', token).namedresult()[0].customer_id
         print "Customer ID: %s", customer_id
         # run a query to grab all the products in the shopping cart that belong to the customer
@@ -237,6 +246,18 @@ def api_checkout():
 
         print "Total Price: "
         print total_price
+
+        # stripe.api_key = 'sk_test_qf6MAujJNLTQbN8cERTFN9sZ'
+        # Stripe Secret key
+        stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+
+        # to create a credit card, create a charge object
+        stripe.Charge.create(
+          amount= total_price * 100,
+          currency="usd",
+          source= stripe_token, # obtained with Stripe.js
+          description="Charge for %s" % stripe_email
+        )
 
         purchase_id = db.query(
         """
