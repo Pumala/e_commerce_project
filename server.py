@@ -259,9 +259,9 @@ def api_checkout():
           description="Charge for %s" % stripe_email
         )
 
-        # print 'CREDIT CARD CHARGE RESPONSE %s', credit_card_charge
-        # print '\n\n\nCREDIT CARD CHARGE RESPONSE for STATUS: %s\n\n\n' % credit_card_charge['status']
-        # print '\n\n\nCREDIT CARD CHARGE RESPONSE for SOURCE BRAND: %s\n\n\n', credit_card_charge['source']['brand']
+        print 'CREDIT CARD CHARGE RESPONSE %s', credit_card_charge
+        print '\n\n\nCREDIT CARD CHARGE RESPONSE for STATUS: %s\n\n\n' % credit_card_charge['status']
+        print '\n\n\nCREDIT CARD CHARGE RESPONSE for SOURCE BRAND: %s\n\n\n', credit_card_charge['source']['brand']
 
         # if the credit card payment was successful, continue to insert order into db
         if credit_card_charge['status'] == 'succeeded':
@@ -327,7 +327,10 @@ def api_checkout():
                 'total_price': total_price
             })
         else:
-            # if payment charge wasn't sucessful, handle the error
+            # if payment charge wasn't sucessful
+            # Stripe will handle the error
+            # 400 => the request was unacceptable
+            return "FAIL!!!!", 400
 
 if __name__ == '__main__':
     app.run(debug=True)

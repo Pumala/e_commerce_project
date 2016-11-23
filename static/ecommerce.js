@@ -283,6 +283,7 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
     });
 
     $scope.paymentCheckout = function() {
+      console.log("FIRST PART:    ....")
       // initialize $scope.address_line_2 to nothing otherwise it will be sent as undefined and this will cause an issue when trying to insert information into the database
       $scope.address_line_2 = ""
       $scope.shipping_info = {
@@ -318,41 +319,6 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
     };
 
 });
-    // EC_Factory.getCheckout($scope.shipping_info)
-    //   .success(function(shopping_cart) {
-    //     console.log("We checked out and are going to the thank you page!");
-    //     $state.go('thanks');
-    //   });
-    //   // this actually opens the popup modal dialog
-    //   handler.open({
-    //     name: 'My awesome store',
-    //     description: 'Some magazines',
-    //     amount: amount * 100
-    //   });
-
-  // $scope.paymentCheckout = function() {
-  //   var amount = $scope.total_price;
-  //   var handler = StripeCheckout.configure({
-  //     // publishable key
-  //     key: 'pk_test_6ejpZxH0HdamRL9OQ2JymyQB',
-  //     locale: 'auto',
-  //     token: function callback(token) {
-  //       console.log("STRIPE TOKEN", token)
-  //       var stripeToken = token.id;
-  //       // Make checkout API call here and send the stripe token
-  //       // to the back end
-  //       EC_Factory.checkoutAPI(stripeToken);
-  //     }
-  //   });
-  //   // this actually opens the popup modal dialog
-  //   handler.open({
-  //     name: 'My awesome store',
-  //     description: 'Some magazines',
-  //     amount: amount * 100
-  //   });
-//   };
-//
-// });
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
