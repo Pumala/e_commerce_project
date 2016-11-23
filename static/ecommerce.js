@@ -159,6 +159,10 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
     });
   }
 
+  service.checkoutAPI = function(stripeToken) {
+    var url = ""
+  }
+
   return service;
 
 });
@@ -293,6 +297,28 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
         $state.go('thanks');
       });
   }
+
+  $scope.paymentCheckout = function() {
+    var amount = $scope.total_price;
+    var handler = StripeCheckout.configure({
+      // publishable key
+      key: 'pk_test_6ejpZxH0HdamRL9OQ2JymyQB',
+      locale: 'auto',
+      token: function callback(token) {
+        console.log("STRIPE TOKEN", token)
+        var stripeToken = token.id;
+        // Make checkout API call here and send the stripe token
+        // to the back end
+        EC_Factory.checkoutAPI(stripeToken);
+      }
+    });
+    // this actually opens the popup modal dialog
+    handler.open({
+      name: 'My awesome store',
+      description: 'Some magazines',
+      amount: amount * 100
+    });
+  };
 
 });
 

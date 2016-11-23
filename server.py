@@ -4,7 +4,7 @@ load_dotenv(find_dotenv())
 from flask import Flask, flash, redirect, request, jsonify
 import pg, os
 import bcrypt, uuid
-import time
+import time, stripe
 
 db = pg.DB(
     dbname=os.environ.get('PG_DBNAME'),
@@ -15,6 +15,9 @@ db = pg.DB(
 
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('e_commerce_pro', static_url_path='', template_folder=tmp_dir)
+
+# Stripe Secret key
+# stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 @app.route('/')
 def home():
