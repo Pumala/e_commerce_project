@@ -252,73 +252,82 @@ def api_checkout():
         stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
         # to create a credit card, create a charge object
-        stripe.Charge.create(
+        credit_card_charge = stripe.Charge.create(
           amount= total_price * 100,
           currency="usd",
           source= stripe_token, # obtained with Stripe.js
           description="Charge for %s" % stripe_email
         )
 
-        purchase_id = db.query(
-        """
-            INSERT INTO
-                purchase(
+        # print 'CREDIT CARD CHARGE RESPONSE %s', credit_card_charge
+        # print '\n\n\nCREDIT CARD CHARGE RESPONSE for STATUS: %s\n\n\n' % credit_card_charge['status']
+        # print '\n\n\nCREDIT CARD CHARGE RESPONSE for SOURCE BRAND: %s\n\n\n', credit_card_charge['source']['brand']
+
+        # if the credit card payment was successful, continue to insert order into db
+        if credit_card_charge['status'] == 'succeeded':
+
+            purchase_id = db.query(
+            """
+                INSERT INTO
+                    purchase(
+                        customer_id,
+                        total_price,
+                        address,
+                        address_line_2,
+                        city,
+                        state,
+                        zip_code
+                    )
+                VALUES
+                    ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id;
+            """, (
                     customer_id,
                     total_price,
-                    address,
-                    address_line_2,
-                    city,
-                    state,
-                    zip_code
+                    results['shipping_info']['address'],
+                    results['shipping_info']['address_line_2'],
+                    results['shipping_info']['city'],
+                    results['shipping_info']['state'],
+                    results['shipping_info']['zip_code']
                 )
-            VALUES
-                ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING id;
-        """, (
-                customer_id,
-                total_price,
-                results['shipping_info']['address'],
-                results['shipping_info']['address_line_2'],
-                results['shipping_info']['city'],
-                results['shipping_info']['state'],
-                results['shipping_info']['zip_code']
             )
-        )
-        purchase_id = purchase_id.namedresult()[0].id
+            purchase_id = purchase_id.namedresult()[0].id
 
-        # run a query to grab all the product_id neccessary for next step
-        productIdQuery = db.query("""
-            select
-                product_id,
-                purchase.id as purchase_id
-            from
-                product_in_shopping_cart,
-                purchase
-            where
-                product_in_shopping_cart.customer_id = purchase.customer_id and
-                purchase.customer_id = $1
-            """,
-            customer_id).dictresult()
+            # run a query to grab all the product_id neccessary for next step
+            productIdQuery = db.query("""
+                select
+                    product_id,
+                    purchase.id as purchase_id
+                from
+                    product_in_shopping_cart,
+                    purchase
+                where
+                    product_in_shopping_cart.customer_id = purchase.customer_id and
+                    purchase.customer_id = $1
+                """,
+                customer_id).dictresult()
 
-        # run a loop and insert the pair (product_id and purchase_id) into product_in_purchase table
-        for item in productIdQuery:
-            print "Item in productIdQuery: "
-            print item
-            db.insert(
-                'product_in_purchase',
-                {
-                    'product_id': item['product_id'],
-                    'purchase_id': purchase_id
-                }
-            )
+            # run a loop and insert the pair (product_id and purchase_id) into product_in_purchase table
+            for item in productIdQuery:
+                print "Item in productIdQuery: "
+                print item
+                db.insert(
+                    'product_in_purchase',
+                    {
+                        'product_id': item['product_id'],
+                        'purchase_id': purchase_id
+                    }
+                )
 
-        # delete all the items in the customer's shopping cart
-        db.query('delete from product_in_shopping_cart where customer_id = $1', customer_id)
+            # delete all the items in the customer's shopping cart
+            db.query('delete from product_in_shopping_cart where customer_id = $1', customer_id)
 
-        return jsonify({
-            'shopping_cart_products': shopping_cart_products,
-            'total_price': total_price
-        })
+            return jsonify({
+                'shopping_cart_products': shopping_cart_products,
+                'total_price': total_price
+            })
+        else:
+            # if payment charge wasn't sucessful, handle the error
 
 if __name__ == '__main__':
     app.run(debug=True)
