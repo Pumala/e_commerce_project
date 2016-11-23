@@ -16,8 +16,6 @@ db = pg.DB(
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('e_commerce_pro', static_url_path='', template_folder=tmp_dir)
 
-
-
 @app.route('/')
 def home():
     return app.send_static_file('index.html')
@@ -131,8 +129,10 @@ def api_shopping_cart():
     # if token doesn't exist, return "FAIL"
     if not token:
         return "Cannot access shopping cart", 403
-    # else, continue on if token is a match
+    # else, doesn't do anything if token is not a match
     else:
+        pass
+    if results['add_remove'] == 'Add':
         # grab the user and product info using request
         product_id = results['product_id']
 
@@ -144,7 +144,26 @@ def api_shopping_cart():
                 'customer_id': customer_id
             }
         )
-        return 'It was a success!'
+        return 'It was a success adding item!'
+    elif results['add_remove'] == 'Remove':
+
+        # grab the user and product info using request
+        product_id = results['product_id']
+
+        # use product_id and customer_id to make a query to grab
+        # product_in_shopping_cart id to delete
+        deletedItemId = db.query('select id from product_in_shopping_cart where product_id = $1 and customer_id = $2', (product_id, customer_id)).namedresult()[0].id
+        deletedItemId = int(deletedItemId)
+
+        # deletedItemId = deletedItemId.namedresult()[0]['id']
+        # user is able to delete products into shopping cart
+        db.delete(
+            'product_in_shopping_cart',
+            {
+                'id': deletedItemId
+            }
+        )
+        return "Item deleted!!"
 
 
 @app.route('/api/shopping_cart')
@@ -276,10 +295,6 @@ def api_checkout():
             'shopping_cart_products': shopping_cart_products,
             'total_price': total_price
         })
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
