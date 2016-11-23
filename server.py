@@ -16,18 +16,10 @@ db = pg.DB(
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('e_commerce_pro', static_url_path='', template_folder=tmp_dir)
 
-# def token_check(customer_id):
-#     # customer_id = 4
-#     token = db.query("select token from auth_token where customer_id = $1", customer_id).dictresult()
-#     if (token):
-#         return jsonify(token)
-#     else:
-#         return 403
+
 
 @app.route('/')
 def home():
-    # results = db.query('select * from product')
-
     return app.send_static_file('index.html')
 
 @app.route('/api/products')
@@ -40,10 +32,6 @@ def api_product_results():
 def api_product_details(product_id):
     query = db.query('select * from product where id = $1', product_id).dictresult()[0]
     return jsonify(query)
-
-# @app.route('/api/user/signup')
-# def render_user_signup():
-#     return
 
 @app.route('/api/user/signup', methods=['POST'])
 def api_user_signup():
@@ -136,7 +124,6 @@ def api_shopping_cart():
     customer_id = results['customer_id']
     print "Customer ID information: %s" % customer_id
 
-
     # user can only have access to shopping cart if token exists
     token = results['auth_token']
     print "Token information: %s" % token
@@ -162,23 +149,11 @@ def api_shopping_cart():
 
 @app.route('/api/shopping_cart')
 def shopping_cart():
-
-    # print "Request args getting!! %s" % request.args.get()
-
     # grab the user's token and product info using request
     print "Request args %s" % request.args
 
     token = request.args.get('auth_token')
     print "Results information: %s" % token
-
-    # grab customer id from results
-    # customer_id = results['customer_id']
-    # print "Customer ID information: %s" % customer_id
-
-
-    # user can only have access to shopping cart if token exists
-    # token = results['auth_token']
-    # print "Token information: %s" % token
 
     # if token doesn't exist, return "FAIL"
     if not token:
@@ -218,15 +193,6 @@ def api_checkout():
     # grab the user's token using request
     token = results['auth_token']
     print "TOKEN information: %s" % token
-
-    # grab customer id from results
-    # customer_id = results['customer_id']
-    # print "Customer ID information: %s" % customer_id
-
-
-    # user can only have access to shopping cart if token exists
-    # token = results['auth_token']
-    # print "Token information: %s" % token
 
     # if token doesn't exist, return "FAIL"
     if not token:
@@ -277,19 +243,7 @@ def api_checkout():
         )
         purchase_id = purchase_id.namedresult()[0].id
 
-        # db.insert(
-        #     'purchase', {
-        #         'customer_id': customer_id,
-        #         'total_price': total_price,
-        #         'address': results['shipping_info']['address'],
-        #         'address_line_2': results['shipping_info']['address_line_2'],
-        #         'city': results['shipping_info']['city'],
-        #         'state': results['shipping_info']['state'],
-        #         'zip_code': results['shipping_info']['zip_code']
-        #     }
-        # )
-
-        # run a query to grab all the product_id and purchase_id neccessary for next step
+        # run a query to grab all the product_id neccessary for next step
         productIdQuery = db.query("""
             select
                 product_id,
