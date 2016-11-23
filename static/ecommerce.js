@@ -248,20 +248,14 @@ app.controller('LoginController', function($scope, $state, $cookies, $rootScope,
 
 });
 
-app.controller('ShoppingCartController', function($scope, $state, $cookies, $rootScope, EC_Factory, $location) {
+app.controller('ShoppingCartController', function($scope, $state, $cookies, $rootScope, EC_Factory) {
 
   $scope.removeItem = function(product_id) {
     console.log("LETS REMOVE ME!!");
     EC_Factory.removeFromCart(product_id)
       .success(function(deletedMessage) {
-        console.log("LETS REROUTE PLEASE!!!");
-        console.log(deletedMessage);
-        // delete $scope['cat']
-        // delete $scope['product' + deletedItemId]
-        // $scope.product + deletedItemId
-        // $location.path('/shopping_cart');
-        // $state.go('shopping_cart');
-        // $state.go('home');
+        // reload the page
+        $state.reload();
       });
   }
 
@@ -270,8 +264,7 @@ app.controller('ShoppingCartController', function($scope, $state, $cookies, $roo
       console.log(shopping_cart);
       console.log("shopping_cart");
       $scope.shopping_cart = shopping_cart.shopping_cart_products;
-      $scope.total_price = shopping_cart.total_price
-      $scope.id_list = shopping_cart.id_list
+      $scope.total_price = shopping_cart.total_price;
     });
 });
 
