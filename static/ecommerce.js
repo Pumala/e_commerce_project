@@ -224,32 +224,64 @@ app.controller('SignUpController', function($scope, $stateParams, $state, EC_Fac
 
 app.controller('LoginController', function($scope, $state, $cookies, $rootScope, EC_Factory, $timeout) {
 
+
   $scope.submitLogin = function() {
     $scope.login_data = {
       username: $scope.username,
       password: $scope.password
     }
     EC_Factory.login($scope.login_data)
+      // console.log("LOGIN DATA:", data);
       .success(function(login) {
+        console.log("LOGIN DATA:", login);
+        // store the successful returned response (user data) inside of a cookie
+        $cookies.putObject('cookieData', login);
+        // store user information in a $rootScope variable
+        $rootScope.user_info = login['user'];
+        // store token information in a $rootScope variable
+        $rootScope.authToken = login['auth_token'];
+        // redirect to home page
+        $state.go('home');
         console.log("LOGIN DATA", login);
-        if (login.status === 401) {
-          console.log('HUGE FAIL!');
-          $scope.is_login = true;
-          $timeout(function() {
-            $scope.is_login = false;
-          }, 5000);
-        } else {
-          // store the successful returned response (user data) inside of a cookie
-          $cookies.putObject('cookieData', login);
-          // store user information in a $rootScope variable
-          $rootScope.user_info = login['user'];
-          // store token information in a $rootScope variable
-          $rootScope.authToken = login['auth_token'];
-          // redirect to home page
-          $state.go('home');
-        }
+      })
+      .error(function() {
+        // if (login.status === 401) {
+        console.log('HUGE FAIL!');
+        $scope.is_login = true;
+        $timeout(function() {
+          $scope.is_login = false;
+        }, 5000);
+        // }
       });
   }
+
+
+  // $scope.submitLogin = function() {
+  //   $scope.login_data = {
+  //     username: $scope.username,
+  //     password: $scope.password
+  //   }
+  //   EC_Factory.login($scope.login_data)
+  //     .success(function(login) {
+  //       console.log("LOGIN DATA", login);
+  //       if (login.status === 401) {
+  //         console.log('HUGE FAIL!');
+  //         $scope.is_login = true;
+  //         $timeout(function() {
+  //           $scope.is_login = false;
+  //         }, 5000);
+  //       } else {
+  //         // store the successful returned response (user data) inside of a cookie
+  //         $cookies.putObject('cookieData', login);
+  //         // store user information in a $rootScope variable
+  //         $rootScope.user_info = login['user'];
+  //         // store token information in a $rootScope variable
+  //         $rootScope.authToken = login['auth_token'];
+  //         // redirect to home page
+  //         $state.go('home');
+  //       }
+  //     });
+  // }
 
 });
 
