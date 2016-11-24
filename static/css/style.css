@@ -1,15 +1,41 @@
+/*
+font-family: 'Delius Unicase', cursive;
+font-family: 'Chewy', cursive;
+font-family: 'Gochi Hand', cursive;
+*/
+body {
+  font-family: 'Gochi Hand', cursive;
+  letter-spacing: 0.03em;
+}
+/*******************************
+          NAV BAR
+*******************************/
 nav {
   background-color: slateblue;
 }
 
-nav a {
-  color: #fff;
+/*  NAV LINKS  */
+.navbar-default .navbar-nav>li>a {
+  font-size: 1.25em;
+  transition: 0.3s;
+}
+.navbar-default .navbar-nav>li>a:hover {
+  font-size: 1.25em;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+  transition: 0.3s;
 }
 
 nav span {
   color: #000;
 }
-
+.navbar-brand {
+  /*font-family: 'Chewy', cursive;*/
+  font-family: 'Delius Unicase', cursive;
+}
+.navbar {
+  border-radius: 0;
+}
 .fa-exclamation-circle {
   color: red;
 }
