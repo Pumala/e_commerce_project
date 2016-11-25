@@ -1,11 +1,52 @@
 <!DOCTYPE html>
 
+<div class="container">
 
-<h1>Hi there from the product_detail.html file</h1>
+  <h1>{{product_details.name}}</h1>
 
-<p>
-  {{product_details.name}}
-</p>
+  <div class="row productDetails">
+    <div class="productImg col-md-offset-2 col-md-6">
+      <img src="{{product_details.image_path}}" alt="{{product_details.name}}'s image'" />
+    </div>
+    <div class="col-md-4 productInfo">
+      <p>
+        <strong>Description</strong>: {{product_details.description}}
+      </p>
+      <p>
+        <strong>Price</strong>: ${{product_details.price}}
+      </p>
+      <div ng-show="user_info" class="buttonDiv">
+        <button ng-click="addProduct(product_details.id)" class="btn btn-primary">
+          Add to Cart
+        </button>
+      </div>
+      <div ng-hide="user_info" class="">
+        <h3>Please log in to buy this product</h3>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="productImg">
+    <img src="{{product_details.image_path}}" alt="{{product_details.name}}'s image'" />
+  </div> -->
+
+  <!-- <p>
+    Price: ${{product_details.price}}
+  </p> -->
+
+  <!-- <div ng-show="user_info" class="">
+    <button ng-click="addProduct(product_details.id)" class="btn btn-primary">
+      Add to Cart
+    </button>
+  </div>
+  <div ng-hide="user_info" class="">
+    <h3>Please log in to buy this product</h3>
+  </div> -->
+</div>
+
+<!-- <h1>{{product_details.name}}</h1>
+
 <p>
   {{product_details.description}}
 </p>
@@ -23,4 +64,4 @@
 </div>
 <div ng-hide="user_info" class="">
   <h3>Please log in to buy this product</h3>
-</div>
+</div> -->

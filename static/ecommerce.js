@@ -229,7 +229,7 @@ app.controller('LoginController', function($scope, $state, $cookies, $rootScope,
     $scope.login_data = {
       username: $scope.username,
       password: $scope.password
-    }
+    };
     EC_Factory.login($scope.login_data)
       // console.log("LOGIN DATA:", data);
       .success(function(login) {

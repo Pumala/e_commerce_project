@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 
-<div ng-repeat="product in all_products">
-  <p>
-    {{product.name}}: {{product.description}}
-  </p>
-  <a ui-sref="product_details({product_id: product.id})">
-    <img ng-src="{{product.image_path}}" alt="{{product.name}}'s image" />
-  </a>
+<div class="container">
+
+  <h1>Collect Them All!</h1>
+  <h3>Bobbleheads- fun for the whole family!</h3>
+
+  <div class="row displayProducts">
+    <div class="col-xs-12 col-sm-4 col-md-3" ng-repeat="product in all_products">
+      <p>
+        {{product.name}}<br>
+        {{product.description}}
+      </p>
+      <a ui-sref="product_details({product_id: product.id})">
+        <img ng-src="{{product.image_path}}" alt="{{product.name}}'s image" />
+      </a>
+    </div>
+  </div> <!-- end of row -->
 
 </div>
+
+<!-- <!DOCTYPE html>
+
+<div class="container">
+  <h1>Collect Them All!</h1>
+
+  <div ng-repeat="product in all_products">
+    <p>
+      {{product.name}}: {{product.description}}
+    </p>
+    <a ui-sref="product_details({product_id: product.id})">
+      <img ng-src="{{product.image_path}}" alt="{{product.name}}'s image" />
+    </a>
+
+  </div>
+</div> -->

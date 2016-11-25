@@ -251,7 +251,7 @@ def api_checkout():
         # Stripe Secret key
         stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
-        # to create a credit card, create a charge object
+        # to create a credit card charge, create a charge object
         credit_card_charge = stripe.Charge.create(
           amount= total_price * 100,
           currency="usd",

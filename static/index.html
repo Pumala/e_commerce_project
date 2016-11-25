@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>eCommerce Store</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -11,7 +12,8 @@
     <!-- <link rel="stylesheet" href="/css/angular-flash.css" media="screen" title="no title"> -->
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Chewy|Delius+Unicase|Gochi+Hand" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Chewy|Delius+Unicase|Gochi+Hand" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Chewy|Delius+Unicase|Gochi+Hand|Signika:300,400,600,700" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css" media="screen" title="no title">
@@ -37,9 +39,9 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a ng-hide="user_info.first_name" ui-sref="signup">Sign Up</a></li>
             <li><a ng-hide="user_info.first_name" ui-sref="login">Login</a></li>
-            <li ng-show="user_info.first_name">Hello, {{user_info.first_name}}!</li>
+            <li ng-show="user_info.first_name"><a href="#">Hello, {{user_info.first_name}}!</a></li>
             <li><a ng-show="user_info.first_name" ui-sref="shopping_cart">Shopping Cart</a></li>
-            <li><button ng-show="user_info.first_name" class="btn btn-primary" ng-click="logout()">Logout</button></li>
+            <li><a a href="#" ng-show="user_info.first_name" ng-click="logout()">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
