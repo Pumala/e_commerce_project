@@ -13,6 +13,9 @@ body {
 img {
   width: 100%;
 }
+.muted {
+  color: grey;
+}
 /*******************************
           NAV BAR
 *******************************/
@@ -68,6 +71,34 @@ nav span {
   margin-top: 30px;
 }
 /*******************************
+          SHOPPING CART
+*******************************/
+table {
+  margin: 20px auto;
+  width: 100%;
+}
+table thead {
+  display: none;
+}
+table img {
+  max-width: 150px;
+}
+td {
+  border-top: dotted;
+  padding: 10px 0 15px 0;
+}
+td:last-child {
+  border-bottom: dotted;
+}
+td img {
+  float: left;
+}
+td span {
+  display: block;
+  float: left;
+  margin: 10px 0 0 20px;
+}
+/*******************************
           MEDIA QUERIES
 *******************************/
 @media screen and (min-width: 768px) {
@@ -76,5 +107,8 @@ nav span {
     border-bottom: 1px solid #000;
     padding-bottom: 10px;
     transition: 0.3s;
+  }
+  table thead {
+    display: block;
   }
 }

@@ -1,5 +1,58 @@
 <!DOCTYPE html>
-<h1>Hello from the shopping_cart.html file</h1>
+
+<div class="container">
+
+  <h1>Shopping Cart</h1>
+
+  <table>
+    <!-- <thead>
+      <tr>
+        <th>
+          Item
+        </th>
+        <th>
+          Quantity
+        </th>
+        <th>
+          Item Price
+        </th>
+        <th>
+          Total Price
+        </th>
+      </tr>
+    </thead> -->
+    <tbody>
+      <tr ng-repeat="product in shopping_cart">
+        <td class="clear">
+          <img ng-src="{{product.image_path}}" alt="" />
+          <span>
+            <p>
+              <strong>{{product.name}}</strong>
+            </p>
+            <p class="muted">
+              <strong>Product Id</strong>: {{product.id}}
+            </p>
+            <p>
+              <strong>Price</strong>: {{product.price}}
+            </p>
+            <button ng-click="removeItem(product.id)" class="btn btn-danger" type="button">Remove</button>
+
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="text-center checkoutDiv">
+    <p>
+      <strong>Total Price</strong>: ${{total_price}}
+    </p>
+    <a ui-sref="checkout" class="btn btn-primary" name="button">Checkout</a>
+  </div>
+
+</div>
+
+<!-- <h1>Hello from the shopping_cart.html file</h1>
 
 <div ng-repeat="product in shopping_cart" class="well">
   <img ng-src="{{product.image_path}}" alt="" />
@@ -12,4 +65,4 @@
   Total Price: {{total_price}}
 </p>
 
-<a ui-sref="checkout" class="btn btn-primary" name="button">Checkout</a>
+<a ui-sref="checkout" class="btn btn-primary" name="button">Checkout</a> -->
