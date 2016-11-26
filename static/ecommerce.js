@@ -370,8 +370,8 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
         });
           // this actually opens the popup modal dialog
         handler.open({
-          name: 'My awesome store',
-          description: 'Some magazines',
+          name: 'BobblyWobbly',
+          description: 'Collect them all - one Bobblehead at a time',
           amount: amount * 100
         });
       }
