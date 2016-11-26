@@ -6,10 +6,11 @@
   <h3>Bobbleheads- fun for the whole family!</h3>
 
   <div class="row displayProducts">
-    <div class="col-xs-12 col-sm-4 col-md-3" ng-repeat="product in all_products">
+    <div class="col-xs-12 col-sm-4 col-md-3 homeProduct" ng-repeat="product in all_products">
       <p>
-        {{product.name}}<br>
-        {{product.description}}
+        {{product.name}}
+        <!-- <br> -->
+        <!-- {{product.description}} -->
       </p>
       <a ui-sref="product_details({product_id: product.id})">
         <img ng-src="{{product.image_path}}" alt="{{product.name}}'s image" />

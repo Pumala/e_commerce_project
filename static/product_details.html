@@ -16,9 +16,10 @@
         <strong>Price</strong>: ${{product_details.price}}
       </p>
       <div ng-show="user_info" class="buttonDiv">
-        <button ng-click="addProduct(product_details.id)" class="btn btn-primary">
+        <input type="submit" ng-click="addProduct(product_details.id)" class="addProductBtn" ng-class="{timeoutBtn: added}" value="{{addProductBtn}}">
+        <!-- <button ng-click="addProduct(product_details.id)" ng-model="addProductBtn" class="btn btn-primary">
           Add to Cart
-        </button>
+        </button> -->
       </div>
       <div ng-hide="user_info" class="">
         <h3>Please log in to buy this product</h3>

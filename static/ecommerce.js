@@ -178,8 +178,13 @@ app.controller('HomeController', function($scope, EC_Factory) {
 
 });
 
-app.controller('ProductDetailsController', function($scope, $stateParams, $state, EC_Factory) {
+app.controller('ProductDetailsController', function($scope, $stateParams, $state, EC_Factory, $timeout) {
   $scope.product_id = $stateParams.product_id;
+  $scope.addProductBtn = "Add to Cart!";
+  $scope.added = false;
+
+  console.log("ADD ME:", $scope.addProductBtn);
+  console.log("ADD ME BUTTON:", $scope.added);
 
   EC_Factory.product_details($scope.product_id)
     .success(function(product_details) {
@@ -191,7 +196,14 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
   $scope.addProduct  = function(product_id) {
     EC_Factory.addToCart(product_id)
       .success(function(addedToCart) {
-        console.log(addedToCart);
+        $scope.addProductBtn = "Added!";
+        $scope.added = true;
+        // $scope.addProductBtn.addClassList('timeoutHover');
+        $timeout(function() {
+          $scope.addProductBtn = "Add to Cart!";
+          $scope.added = false;
+          // $scope.addProductBtn.removeClassList('timeoutHover');
+        }, 3000);
       });
   }
 
