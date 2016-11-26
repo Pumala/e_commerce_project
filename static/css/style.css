@@ -164,6 +164,16 @@ td span {
   max-width: 375px;
   margin: auto;
 }
+.shippingInfo ul {
+  margin-top: 20px;
+}
+.shippingInfo .price,
+.shippingInfo .checkoutBtnDiv {
+  text-align: right;
+}
+.shippingInfo .messageDiv {
+  margin: 20px auto;
+}
 /*******************************
           MEDIA QUERIES
 *******************************/

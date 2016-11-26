@@ -317,7 +317,8 @@ app.controller('ShoppingCartController', function($scope, $state, $cookies, $roo
     });
 });
 
-app.controller('CheckoutController', function($scope, $state, $cookies, $rootScope, EC_Factory) {
+app.controller('CheckoutController', function($scope, $state, $cookies, $rootScope, EC_Factory, $timeout) {
+  $scope.continue = false;
 
   EC_Factory.getOrderInfo($scope.shipping_info)
     .success(function(shopping_cart) {
@@ -337,29 +338,43 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
         state: $scope.state,
         zip_code: $scope.zip_code,
       };
-      var amount = $scope.total_price;
-      var handler = StripeCheckout.configure({
-        // publishable key
-        key: 'pk_test_6ejpZxH0HdamRL9OQ2JymyQB',
-        locale: 'auto',
-        token: function callback(token) {
-          console.log("STRIPE TOKEN", token)
-          var stripeToken = token.id;
-          // Make checkout API call here and send the stripe token
-          // to the back end
-          EC_Factory.getCheckout($scope.shipping_info, token)
-            .success(function(shopping_cart) {
-              console.log("We checked out and are going to the thank you page!");
-              $state.go('thanks');
-            });
-        }
-      });
-        // this actually opens the popup modal dialog
-      handler.open({
-        name: 'My awesome store',
-        description: 'Some magazines',
-        amount: amount * 100
-      });
+      console.log('address:', $scope.address);
+      if ($scope.address === undefined || $scope.city === undefined ||
+      $scope.state === undefined || $scope.zip_code === undefined) {
+        console.log('Please enter all required fields.');
+        $scope.continue = false;
+        $scope.showMessage = true;
+        $timeout(function() {
+          $scope.showMessage = false;
+        }, 3000);
+      } else {
+        $scope.continue = true;
+      }
+      if ($scope.continue) {
+        var amount = $scope.total_price;
+        var handler = StripeCheckout.configure({
+          // publishable key
+          key: 'pk_test_6ejpZxH0HdamRL9OQ2JymyQB',
+          locale: 'auto',
+          token: function callback(token) {
+            console.log("STRIPE TOKEN", token)
+            var stripeToken = token.id;
+            // Make checkout API call here and send the stripe token
+            // to the back end
+            EC_Factory.getCheckout($scope.shipping_info, token)
+              .success(function(shopping_cart) {
+                console.log("We checked out and are going to the thank you page!");
+                $state.go('thanks');
+              });
+          }
+        });
+          // this actually opens the popup modal dialog
+        handler.open({
+          name: 'My awesome store',
+          description: 'Some magazines',
+          amount: amount * 100
+        });
+      }
     };
 
 });
