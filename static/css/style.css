@@ -118,6 +118,9 @@ nav span {
 /*******************************
           SHOPPING CART
 *******************************/
+.shoppingCartWrapper {
+  margin-bottom: 50px;
+}
 table {
   margin: 20px auto;
   width: 100%;

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<div class="container">
+<div class="container shoppingCartWrapper">
 
   <h1>Shopping Cart</h1>
 
@@ -24,7 +24,9 @@
     <tbody>
       <tr ng-repeat="product in shopping_cart">
         <td class="clear">
-          <img ng-src="{{product.image_path}}" alt="" />
+          <a ui-sref="product_details({product_id: product.id})">
+            <img ng-src="{{product.image_path}}" alt="" />
+          </a>
           <span>
             <p>
               <strong>{{product.name}}</strong>
