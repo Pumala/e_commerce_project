@@ -58,8 +58,9 @@ Carolyn Lam
 ##### 3. Sign Up Page => '/signup'
 
   * Customers who are new to the site can create a new account
+  * If passwords do not match, the user cannot proceed
 
-  ![signup_page](static/images/signup.png)
+  ![signup_page](static/images/wrong_signup.png)
 
 ##### 4. Login Page => '/login'
 

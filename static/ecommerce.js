@@ -209,10 +209,17 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
 
 });
 
-app.controller('SignUpController', function($scope, $stateParams, $state, EC_Factory) {
+app.controller('SignUpController', function($scope, $timeout, $stateParams, $state, EC_Factory) {
 
   $scope.submitSignup = function() {
     console.log("Clicked submit button");
+    // check if password matches confirm_password
+    if ($scope.password !== $scope.confirm_password) {
+      // $timeout(function() {
+      //   console.log("Hello");
+      // }, 3000);
+      return;
+    }
     // store user signup info in a scope object
     $scope.signup_data = {
       username: $scope.username,

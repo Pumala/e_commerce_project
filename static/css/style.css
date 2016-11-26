@@ -89,6 +89,18 @@ nav span {
 .signupForm label {
   font-size: 1.25em;
 }
+.wrongSignup {
+  font-size: 1em;
+  display: block;
+}
+.wrongSignup p {
+  display: inline-block;
+  font-size: .9em;
+  font-weight: 300;
+}
+.wrongSignup i {
+  font-size: 1em;
+}
 /*******************************
       PRODUCT DETAILS PAGE
 *******************************/
@@ -196,6 +208,12 @@ td span {
     border-bottom: 1px solid #000;
     padding-bottom: 10px;
     transition: 0.3s;
+  }
+  .signupForm label {
+    width: 100%;
+  }
+  .wrongSignup {
+    float: right;
   }
   table thead {
     display: block;
