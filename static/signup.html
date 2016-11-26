@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 
-<div class="container">
+<div class="container signupWrapper">
   <div class="text-center">
     <h1>Sign Up</h1>
   </div>
   <form ng-submit="submitSignup()" class="signupForm" method="post">
     <div class="form-group">
       <label for="username">Username:</label>
-      <input ng-model="username" class="form-control" type="text" name="username" value="">
+      <input ng-model="username" class="form-control" type="text" name="username" required>
     </div>
     <div class="form-group">
       <label for="email">Email:</label>
-      <input ng-model="email" class="form-control" type="email" name="email" value="">
+      <input ng-model="email" class="form-control" type="email" name="email" required>
     </div>
     <div class="form-group">
       <label for="first_name">First Name:</label>
-      <input ng-model="first_name" class="form-control" type="text" name="first_name" value="">
+      <input ng-model="first_name" class="form-control" type="text" name="first_name" required>
     </div>
     <div class="form-group">
       <label for="last_name">Last Name:</label>
-      <input ng-model="last_name" class="form-control" type="text" name="last_name" value="">
+      <input ng-model="last_name" class="form-control" type="text" name="last_name" required>
     </div>
     <div class="form-group">
       <label for="password">Password:</label>
-      <input ng-model="password" class="form-control" type="password" name="password" value="">
+      <input ng-model="password" class="form-control" type="password" name="password" required>
     </div>
     <div class="form-group">
       <label for="confirm_password">Confirm Password:</label>
-      <input ng-model="confirm_password" class="form-control" type="password" name="confirm_password" value="">
+      <input ng-model="confirm_password" class="form-control" type="password" name="confirm_password" required>
       <span ng-show="password !== confirm_password"><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i></span>
     </div>
     <button class="btn btn-primary" type="submit" name="button">Submit</button>

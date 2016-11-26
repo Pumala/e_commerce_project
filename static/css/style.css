@@ -79,6 +79,9 @@ nav span {
 /*******************************
           SIGN UP PAGE
 *******************************/
+.signupWrapper {
+  margin-bottom: 50px;
+}
 .signupForm {
   max-width: 450px;
   margin: 50px auto 0 auto;
