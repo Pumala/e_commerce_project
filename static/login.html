@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 
-<div ng-show="is_login">
-  <h3>Login was unsuccessful. Please try again.</h3>
+<div class="container">
+  <div class="text-center">
+    <h1>Sign In</h1>
+  </div>
+  <div class="wrongLogin" ng-show="is_login">
+    <h3>Login was unsuccessful. Please try again.</h3>
+  </div>
+  <form ng-submit="submitLogin()" class="loginForm" method="post">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input ng-model="username" class="form-control" type="text" name="username" value="">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input ng-model="password" class="form-control" type="password" name="password" value="">
+    </div>
+    <button class="btn btn-primary" type="submit" name="submit">Submit</button>
+  </form>
 </div>
-<form ng-submit="submitLogin()" method="post">
-  <div class="form-group">
-    <label for="username">Username:</label>
-    <input ng-model="username" class="form-control" type="text" name="username" value="">
-  </div>
-  <div class="form-group">
-    <label for="password">Password:</label>
-    <input ng-model="password" class="form-control" type="password" name="password" value="">
-  </div>
-  <button class="btn btn-primary" type="submit" name="submit">Submit</button>
-</form>
