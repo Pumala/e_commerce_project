@@ -38,39 +38,39 @@ Carolyn Lam
 
   * The home page displays all the current products.
 
-  ![home_page](images/home.png)
+  ![home_page](static/images/home.png)
 
 2. Product Detail Page => '/product_detail/{product_id}'
 
   * The product detail displays the product information for one product. Product_id is unique to only that product.
 
-  ![product_details_page](images/product_details.png)
+  ![product_details_page](static/images/product_details.png)
 
 3. Sign Up Page => '/signup'
 
   * Customers who are new to the site can create a new account
 
-  ![signup_page](images/signup.png)
+  ![signup_page](static/images/signup.png)
 
 4. Login Page => '/login'
 
   * Customers who already have an account can login using their email address and password
 
-  ![login_page](images/signin.png)
+  ![login_page](static/images/signin.png)
 
 5. Shopping Cart Page => '/shopping_cart'
 
   * Only registered users can access this page
   * The shopping cart lists all the products that the customer has added to their shopping cart
 
-  ![shopping_cart_page](images/shopping_cart.png)
+  ![shopping_cart_page](static/images/shopping_cart.png)
 
 6. Checkout Page => '/checkout'
 
   * features a shipping form - all required fields must be filled in order to proceed to payment
   * Stripe API handles the payment processing
 
-  ![checkout_page](images/checkout.png)
+  ![checkout_page](static/images/checkout.png)
 
 7. Thank You Page => '/thanks'
 
@@ -78,7 +78,7 @@ Carolyn Lam
   * lets them know that their order has been received
   * also lets them know when they should be receiving their order
 
-  ![thank_you_page](images/thank_you.png)
+  ![thank_you_page](static/images/thank_you.png)
 
 
 #### Sample Code:
