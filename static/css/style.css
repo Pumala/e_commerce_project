@@ -107,6 +107,7 @@ nav span {
 }
 .productInfo .buttonDiv {
   text-align: center;
+  margin-top: 30px;
 }
 .productInfo button {
   margin-top: 30px;
@@ -149,6 +150,9 @@ td span {
   float: left;
   margin: 10px 0 0 20px;
 }
+.checkoutDiv {
+  text-align: center;
+}
 .empty {
   margin: 50px 0 60px 0;
 }
@@ -163,6 +167,9 @@ td span {
 /*******************************
           CHECKOUT PAGE
 *******************************/
+.checkoutWrapper {
+  margin-bottom: 50px;
+}
 .shippingForm label {
   font-size: 1.25em;
 }
@@ -199,4 +206,20 @@ td span {
   .homeProduct > *:nth-child(3n+1) {
      clear: both;
   }*/
+}
+@media screen and (min-width: 992px) {
+  .tableRowWrapper {
+    margin-top: 40px;
+  }
+  .tableColWrapper {
+    border-right: 1px solid #000;
+    padding-right: 50px;
+  }
+  table {
+    margin: 0 auto;
+  }
+  .checkoutDiv {
+    margin-left: 30px;
+    text-align: left;
+  }
 }

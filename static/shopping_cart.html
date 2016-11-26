@@ -2,63 +2,73 @@
 
 <div class="container shoppingCartWrapper">
 
-  <h1>Shopping Cart</h1>
+  <h1>
+    Shopping Cart
+    <span>({{shopping_cart.length}})</span>
+  </h1>
 
-  <table ng-show="shopping_cart">
-    <!-- <thead>
-      <tr>
-        <th>
-          Item
-        </th>
-        <th>
-          Quantity
-        </th>
-        <th>
-          Item Price
-        </th>
-        <th>
-          Total Price
-        </th>
-      </tr>
-    </thead> -->
-    <tbody>
-      <tr ng-repeat="product in shopping_cart">
-        <td class="clear">
-          <a ui-sref="product_details({product_id: product.id})">
-            <img ng-src="{{product.image_path}}" alt="" />
-          </a>
-          <span>
-            <p>
-              <strong>{{product.name}}</strong>
-            </p>
-            <p class="muted">
-              <strong>Product Id</strong>: {{product.id}}
-            </p>
-            <p>
-              <strong>Price</strong>: ${{product.price}}
-            </p>
-            <button ng-click="removeItem(product.id)" class="btn btn-danger" type="button">Remove</button>
+  <div class="row tableRowWrapper">
+    <div class="col-md-9 tableColWrapper">
+      <table ng-show="shopping_cart">
+        <!-- <thead>
+          <tr>
+            <th>
+              Item
+            </th>
+            <th>
+              Quantity
+            </th>
+            <th>
+              Item Price
+            </th>
+            <th>
+              Total Price
+            </th>
+          </tr>
+        </thead> -->
+        <tbody>
+          <tr ng-repeat="product in shopping_cart">
+            <td class="clear">
+              <a ui-sref="product_details({product_id: product.id})">
+                <img ng-src="{{product.image_path}}" alt="" />
+              </a>
+              <span>
+                <p>
+                  <strong>{{product.name}}</strong>
+                </p>
+                <p class="muted">
+                  <strong>Product Id</strong>: {{product.id}}
+                </p>
+                <p>
+                  <strong>Price</strong>: ${{product.price}}
+                </p>
+                <button ng-click="removeItem(product.id)" class="btn btn-danger" type="button">Remove</button>
 
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-  <div class="text-center empty" ng-hide="shopping_cart.length !== 0">
-    <p>
-      Your bag is currently empty.<br><br>
-      <a class="muted" ui-sref="home">Continue shopping</a>
-    </p>
-  </div>
+      <div class="text-center empty" ng-hide="shopping_cart.length !== 0">
+        <p>
+          Your bag is currently empty.<br><br>
+          <a class="muted" ui-sref="home">Continue shopping</a>
+        </p>
+      </div>
 
-  <div class="text-center checkoutDiv">
-    <p>
-      <strong>Total Price</strong>: ${{total_price}}
-    </p>
-    <div ng-show="shopping_cart.length > 0">
-      <a ui-sref="checkout" class="btn btn-primary" name="button">Checkout!</a>
     </div>
+    <div class="col-md-3">
+      <div class="checkoutDiv">
+        <p>
+          <strong>Total Price</strong>: ${{total_price}}
+        </p>
+        <div ng-show="shopping_cart.length > 0">
+          <a ui-sref="checkout" class="btn btn-primary" name="button">Checkout!</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
