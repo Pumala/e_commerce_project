@@ -157,8 +157,12 @@ td span {
 /*******************************
           CHECKOUT PAGE
 *******************************/
-.shippingForm {
-  max-width: 600px;
+.shippingForm label {
+  font-size: 1.25em;
+}
+.shippingInfo {
+  max-width: 375px;
+  margin: auto;
 }
 /*******************************
           MEDIA QUERIES

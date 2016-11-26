@@ -33,7 +33,7 @@
               <strong>Product Id</strong>: {{product.id}}
             </p>
             <p>
-              <strong>Price</strong>: {{product.price}}
+              <strong>Price</strong>: ${{product.price}}
             </p>
             <button ng-click="removeItem(product.id)" class="btn btn-danger" type="button">Remove</button>
 
@@ -54,7 +54,9 @@
     <p>
       <strong>Total Price</strong>: ${{total_price}}
     </p>
-    <a ui-sref="checkout" class="btn btn-primary" name="button">Checkout</a>
+    <div ng-show="shopping_cart.length > 0">
+      <a ui-sref="checkout" class="btn btn-primary" name="button">Checkout!</a>
+    </div>
   </div>
 
 </div>
