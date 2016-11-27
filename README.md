@@ -56,7 +56,7 @@ Carolyn Lam
 
 ##### 4. Login Page => '/login'
 
-  * Customers who already have an account can login using their email address and password
+  * Customers who already have an account can login using their username and password
   * message displays if login info was incorrect
 
   ![login_page](static/images/wrong_login.png)
@@ -93,26 +93,26 @@ Carolyn Lam
 
 ### Further Info:
 
-The e-commerce site was built using HTML, CSS, and AngularJS on the front end and Flask on the back-end. Juan Cortes and I (Carolyn Lam) worked together in a pair-programming session to create most of the back-end and front-end. Then we each decided to continue building the e-commerce with our own personal touches and styling.
+The e-commerce site was built using HTML, CSS, and AngularJS on the front end and Flask on the back-end. I (Carolyn Lam) worked on the back-end part. Then I worked in a pair-programming session with Juan Cortes to build most of the front-end. Before starting the front-end we both had our own back-end code, so we decided to merge our code into one file. After creating the main functionality in the front-end, we each decided to continue building the e-commerce with our own personal touches and styling.
 
 #### E-Commerce (Backend):
 
-My partner and I first worked on the API back-end of the project. We created a PostgreSQL database and set up the tables we've need using a schema.
+I first worked on the API back-end of the project. I created a PostgreSQL database and set up the tables we've need using a schema.
 
-Then we set up all the API routes in a py file called server.py. Some of the routes required returning certain information from the database to the front-end. For instance, making a 'GET method' to '/api/products' returns information for all the products in the database that the front-end will use to render the home page. Additionally, these API routes also tested for errors and if an error had occurred, they were set up to return an error status code instead of a successful status code.
+Then I set up all the API routes in a py file called server.py. Some of the routes required returning certain information from the database to the front-end. For instance, making a 'GET method' to '/api/products' returns information for all the products in the database that the front-end will use to render the home page. Additionally, these API routes also tested for errors and if an error had occurred, they were set up to return an error status code instead of a successful status code.
 
-Also in our server.py file, we installed and imported some modules and features that our project would need. Some of them turned out to be new ones we hadn't yet worked with. For instance, we installed bcrypt for this project. Bcrypt is used to encrypt passwords so that passwords are stored safely in the database. So, in the case someone were to gain access into the database, all they would see of peoples' passwords would be their encrypted passwords. Another new feature we worked with was the uuid module. The uuid module is used to generate unique authentication tokens for new user sessions. Additionally, we also used Stripe's API to handle credit card charges (more on this later).
+Also in the server.py file, I installed and imported some modules and features that the project would need. Some of them turned out to be new ones I hadn't yet worked with. For instance, I installed bcrypt for this project. Bcrypt is used to encrypt passwords so that passwords are stored safely in the database. So, in the case someone were to gain access into the database, all they would see of peoples' passwords would be their encrypted passwords. Another new feature I worked with was the uuid module. The uuid module is used to generate unique authentication tokens for new user sessions. Additionally, I also used Stripe's API to handle credit card charges (more on this later).
 
 #### E-Commerce (Front-End):
 
-After building the back-end, we started working on the front-end. We began by setting up our files and folders. We created a main js file called ecommerce.js that would handle the main front-end logic. At the top of this file we included angular and modules we'd be using such as 'ui.router' and 'ngCookies' (more on this later).
+After merging our back-end code, my partner and I started working on the front-end. We began by setting up our files and folders. We created a main js file called ecommerce.js that would handle the main front-end logic. At the top of this file we included angular and modules we'd be using such as 'ui.router' and 'ngCookies' (more on this later).
 
 ```
 var app = angular.module('e_commerce_app', ['ui.router', 'ngCookies'])
 
 ```
 
-In our ecommerce.js, we created an app.config that allowed us to set up different states. Each state has its own name, url, html file, and controller. We also created an app.factory, which is a function that returns an object. We had ours set up so that it return an object called services which returned different services that the factory provided.
+In our ecommerce.js, we created an app.config that allowed us to set up different states. Each state has its own name, url, html file, and controller. We also created an app.factory, which is a function that returns an object. We had ours set up so that it returned an object called service which stores the different services that the factory provided.
 
 ### Sample Code:
 
