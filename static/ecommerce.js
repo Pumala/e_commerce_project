@@ -1,33 +1,35 @@
 var app = angular.module('e_commerce_app', ['ui.router', 'ngCookies'])
 
-app.factory('Flash', function($rootScope, $timeout) {
-  function setMessage(message) {
-    $rootScope.flashMessage = message;
-    $timeout(function() {
-      $rootScope.flashMessage = null;
-    }, 5000);
-  }
-
-  return {
-    setMessage: setMessage
-
-  };
-
-  // Service is called like This
-  // flash.setMessage("Welcome " + somethingFromDatabase + "!");
-});
+// app.factory('Flash', function($rootScope, $timeout) {
+//   function setMessage(message) {
+//     $rootScope.flashMessage = message;
+//     $timeout(function() {
+//       $rootScope.flashMessage = null;
+//     }, 5000);
+//   }
+//
+//   return {
+//     setMessage: setMessage
+//
+//   };
+//
+//   // Service is called like This
+//   // flash.setMessage("Welcome " + somethingFromDatabase + "!");
+// });
 
 app.factory("EC_Factory", function($http, $cookies, $rootScope) {
-  var service = {};
-  $rootScope.factoryCookieData = null;
-  console.log("Printing initial cookie", $rootScope.factoryCookieData);
-  // cookie data gets passed into the factory
-  $rootScope.factoryCookieData = $cookies.getObject('cookieData');
-  console.log("Printing initial cookie", $rootScope.factoryCookieData);
 
-  console.log("I am inside the factory!");
+  // create a service object that stores all the methods
+  var service = {};
+
+  $rootScope.factoryCookieData = null;
+
+  // cookie data is stored into the factory as a global rootScope variable
+  $rootScope.factoryCookieData = $cookies.getObject('cookieData');
+
+  // check if a user is logged in by seeing if the cookieData is storing the user's data
+  // good to have when page has been refreshed, saves the user's info and does not log them out
   if ($rootScope.factoryCookieData) {
-    console.log("I am a cookie data in the factory!");
     // grab auth_token from the cookieData
     $rootScope.authToken = $rootScope.factoryCookieData.auth_token;
     // grab user information from cookieData
@@ -35,7 +37,6 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
   }
 
   $rootScope.logout = function() {
-    console.log("Entered the logout function");
     // remove method => pass in the value of the cookie data you want to remove
     $cookies.remove('cookieData');
     // reset all the scope variables
@@ -87,12 +88,11 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
     });
   }
 
-  service.addToCart = function(product_id) {
-    var addToCart = 'Add';
+  service.updateCart = function(product_id, add_or_delete) {
+    // add_or_delete is a string value of either 'Add' or 'Delete'
+    // the back-end will either add or delete the item depending on this value
     var url = '/api/shopping_cart';
-    console.log("Token:", $cookies.getObject('cookieData').auth_token);
-    console.log("Product ID:", product_id);
-    console.log("user info:", $cookies.getObject('cookieData').user["id"]);
+
     return $http({
       method: "POST",
       url: url,
@@ -100,28 +100,46 @@ app.factory("EC_Factory", function($http, $cookies, $rootScope) {
         auth_token: $cookies.getObject('cookieData').auth_token,
         customer_id: $cookies.getObject('cookieData').user["id"],
         product_id: product_id,
-        add_remove: addToCart
+        add_remove: add_or_delete
       }
     });
   }
 
-  service.removeFromCart = function(product_id) {
-    var addToCart = 'Remove';
-    var url = 'api/shopping_cart';
-    console.log("Token:", $cookies.getObject('cookieData').auth_token);
-    console.log("Product ID:", product_id);
-    console.log("user info:", $cookies.getObject('cookieData').user["id"]);
-    return $http({
-      method: "POST",
-      url: url,
-      data: {
-        auth_token: $cookies.getObject('cookieData').auth_token,
-        customer_id: $cookies.getObject('cookieData').user["id"],
-        product_id: product_id,
-        add_remove: addToCart
-      }
-    });
-  }
+  // service.addToCart = function(product_id) {
+  //   var addToCart = 'Add';
+  //   var url = '/api/shopping_cart';
+  //   console.log("Token:", $cookies.getObject('cookieData').auth_token);
+  //   console.log("Product ID:", product_id);
+  //   console.log("user info:", $cookies.getObject('cookieData').user["id"]);
+  //   return $http({
+  //     method: "POST",
+  //     url: url,
+  //     data: {
+  //       auth_token: $cookies.getObject('cookieData').auth_token,
+  //       customer_id: $cookies.getObject('cookieData').user["id"],
+  //       product_id: product_id,
+  //       add_remove: addToCart
+  //     }
+  //   });
+  // }
+  //
+  // service.removeFromCart = function(product_id) {
+  //   var addToCart = 'Remove';
+  //   var url = 'api/shopping_cart';
+  //   console.log("Token:", $cookies.getObject('cookieData').auth_token);
+  //   console.log("Product ID:", product_id);
+  //   console.log("user info:", $cookies.getObject('cookieData').user["id"]);
+  //   return $http({
+  //     method: "POST",
+  //     url: url,
+  //     data: {
+  //       auth_token: $cookies.getObject('cookieData').auth_token,
+  //       customer_id: $cookies.getObject('cookieData').user["id"],
+  //       product_id: product_id,
+  //       add_remove: addToCart
+  //     }
+  //   });
+  // }
 
   service.getShoppingCart = function() {
     console.log("Inside service shopping cart");
@@ -194,7 +212,7 @@ app.controller('ProductDetailsController', function($scope, $stateParams, $state
     })
 
   $scope.addProduct  = function(product_id) {
-    EC_Factory.addToCart(product_id)
+    EC_Factory.updateCart(product_id, 'Add')
       .success(function(addedToCart) {
         $scope.addProductBtn = "Added!";
         $scope.added = true;
@@ -330,8 +348,7 @@ app.controller('LoginController', function($scope, $state, $cookies, $rootScope,
 app.controller('ShoppingCartController', function($scope, $state, $cookies, $rootScope, EC_Factory) {
 
   $scope.removeItem = function(product_id) {
-    console.log("LETS REMOVE ME!!");
-    EC_Factory.removeFromCart(product_id)
+    EC_Factory.updateCart(product_id, 'Remove')
       .success(function(deletedMessage) {
         // reload the page
         $state.reload();
@@ -340,27 +357,24 @@ app.controller('ShoppingCartController', function($scope, $state, $cookies, $roo
 
   EC_Factory.getShoppingCart()
     .success(function(shopping_cart) {
-      console.log(shopping_cart);
-      console.log("shopping_cart");
+      // upon success, assign return info to scope variables to be used in html pages
       $scope.shopping_cart = shopping_cart.shopping_cart_products;
       $scope.total_price = shopping_cart.total_price;
     });
 });
 
 app.controller('CheckoutController', function($scope, $state, $cookies, $rootScope, EC_Factory, $timeout) {
-  $scope.continue = false;
 
   EC_Factory.getOrderInfo($scope.shipping_info)
     .success(function(shopping_cart) {
-      console.log("We checked out!");
       $scope.shopping_cart = shopping_cart.shopping_cart_products;
       $scope.total_price = shopping_cart.total_price
     });
 
     $scope.paymentCheckout = function() {
-      console.log("FIRST PART:    ....")
       // initialize $scope.address_line_2 to nothing otherwise it will be sent as undefined and this will cause an issue when trying to insert information into the database
       $scope.address_line_2 = ""
+      // save user shipping info to an object
       $scope.shipping_info = {
         address: $scope.address,
         address_line_2: $scope.address_line_2,
@@ -368,18 +382,20 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
         state: $scope.state,
         zip_code: $scope.zip_code,
       };
-      console.log('address:', $scope.address);
+      // checks if any of the required fields in the shipping info form is undefined
       if ($scope.address === undefined || $scope.city === undefined ||
       $scope.state === undefined || $scope.zip_code === undefined) {
-        console.log('Please enter all required fields.');
+        // if any field is undefined, do not proceed to payment part of checkout
         $scope.continue = false;
         $scope.showMessage = true;
         $timeout(function() {
           $scope.showMessage = false;
         }, 3000);
       } else {
+        // if none of the required fields is undefined, continue to payment part of checkout
         $scope.continue = true;
       }
+      // continue to payment part of checkout
       if ($scope.continue) {
         var amount = $scope.total_price;
         var handler = StripeCheckout.configure({
@@ -387,18 +403,16 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
           key: 'pk_test_6ejpZxH0HdamRL9OQ2JymyQB',
           locale: 'auto',
           token: function callback(token) {
-            console.log("STRIPE TOKEN", token)
-            var stripeToken = token.id;
-            // Make checkout API call here and send the stripe token
-            // to the back end
+            // Make checkout API call here and send the stripe token to the back end
+            // the back-end later uses the stripe token id to create a credit card charge
             EC_Factory.getCheckout($scope.shipping_info, token)
               .success(function(shopping_cart) {
-                console.log("We checked out and are going to the thank you page!");
+                // redirect to thank you page
                 $state.go('thanks');
               });
           }
         });
-          // this actually opens the popup modal dialog
+        // this actually opens the popup modal dialog where users can enter payment info
         handler.open({
           name: 'BobblyWobbly',
           description: 'Collect them all - one Bobblehead at a time',

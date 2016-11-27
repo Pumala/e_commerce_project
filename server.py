@@ -3,8 +3,7 @@ load_dotenv(find_dotenv())
 
 from flask import Flask, flash, redirect, request, jsonify
 import pg, os
-import bcrypt, uuid
-import time, stripe
+import bcrypt, uuid, stripe
 
 db = pg.DB(
     dbname=os.environ.get('PG_DBNAME'),
@@ -247,7 +246,6 @@ def api_checkout():
         print "Total Price: "
         print total_price
 
-        # stripe.api_key = 'sk_test_qf6MAujJNLTQbN8cERTFN9sZ'
         # Stripe Secret key
         stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
