@@ -3,7 +3,7 @@ load_dotenv(find_dotenv())
 
 from flask import Flask, flash, redirect, request, jsonify
 import pg, os
-import bcrypt, uuid, stripe
+import uuid, bcrypt, stripe
 
 db = pg.DB(
     dbname=os.environ.get('PG_DBNAME'),
