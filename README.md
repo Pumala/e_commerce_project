@@ -271,6 +271,45 @@ service.updateCart = function(product_id, add_or_delete) {
       description="Charge for %s" % stripe_email
     )
 ```
+### What I Learned:
+
+One of the biggest take aways I learned was how to use ngCookies. This module is part of AngularJS and helps to read and write browser cookies. I learned to set a value for cookies keys using putObject() and then access the cookie using get(), with the name of the key inside the parenthesis.
+
+My biggest obstacle was setting up the cookie logic in the front-end so that when a page was refreshed while the customer was logged in, the customer would remain logged in. To help implement this, my partner and I modified our app.factory because it is always running. That means, when the page is refreshed, it is always called and kind of acts like a reinitialization. It worked out for our needs, because we always wanted to check for any existing cookie when the page is refreshed.
+
+Along with using cookies, using rootScope to create global variables also helped. Usually, the use of rootScope is not advised, but using them in this context was okay. Saving the user info to rootScope variables allowed us to access them in any html file and controller.
+
+  * Below shows a snippet of app.factory dealing with cookies and rootScope
+
+  ```
+  app.factory("EC_Factory", function($http, $cookies, $rootScope) {
+
+    // create a service object that stores all the methods
+    var service = {};
+
+    $rootScope.factoryCookieData = null;
+
+    // cookie data is stored into the factory as a global rootScope variable
+    $rootScope.factoryCookieData = $cookies.getObject('cookieData');
+
+    // check if a user is logged in by seeing if the cookieData is storing the user's data
+    // good to have when page has been refreshed, saves the user's info and does not log them out
+    if ($rootScope.factoryCookieData) {
+      // grab auth_token from the cookieData
+      $rootScope.authToken = $rootScope.factoryCookieData.auth_token;
+      // grab user information from cookieData
+      $rootScope.user_info = $rootScope.factoryCookieData.user;
+    }
+
+    $rootScope.logout = function() {
+      // remove method => pass in the value of the cookie data you want to remove
+      $cookies.remove('cookieData');
+      // reset all the scope variables
+      $rootScope.factoryCookieData = null;
+      $rootScope.authToken = null;
+      $rootScope.user_info = null;
+    }
+    ```
 
 
 ### What To Do Next:
@@ -280,22 +319,3 @@ service.updateCart = function(product_id, add_or_delete) {
 * update shopping cart to reflect the same product in one row with a property called quantity that keeps track of how many there are of it
 * create a search bar where users can search for products
 * continue user testing - handle all errors
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- My partner and I began the project starting from the back end. First, we began with a database schema and set up all the routes we'd be using. We also installed and imported a couple of new things we hadn't worked with before, one of them being the bcrypt, which is used to encrypt passwords to safely store passwords in the database. We also imported the uuid module to generate unique authentication tokens for new user sessions. -->
-
-<!-- Then we installed bcrypt to encrypt passwords to safely store passwords in the database. We also imported the uuid module to generate unique authentication tokens for new user sessions. -->
-
-<!-- I decided to create an e-commerce site that sells bobbleheads because I think they're fun and humorous products that make people smile and laugh. -->
