@@ -15,9 +15,6 @@ db = pg.DB(
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask('e_commerce_pro', static_url_path='', template_folder=tmp_dir)
 
-# Stripe Secret key
-# stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
-
 @app.route('/')
 def home():
     return app.send_static_file('index.html')
