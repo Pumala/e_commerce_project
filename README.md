@@ -170,7 +170,7 @@ app.controller('CheckoutController', function($scope, $state, $cookies, $rootSco
         });
         // this actually opens the popup modal dialog where users can enter payment info
         handler.open({
-          name: 'BobblyWobbly',
+          name: 'WobblyBobbly',
           description: 'Collect them all - one Bobblehead at a time',
           amount: amount * 100
         });
