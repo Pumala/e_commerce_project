@@ -6,7 +6,7 @@ import pg, os
 import uuid, bcrypt, stripe
 
 db = pg.DB(
-    dbname=os.environ.get('PG__DB__NAME'),
+    dbname=os.environ.get('PG_DBNAME_E_COMMERCE'),
     host=os.environ.get('PG_HOST'),
     user=os.environ.get('PG_USERNAME'),
     passwd=os.environ.get('PG_PASSWORD')
