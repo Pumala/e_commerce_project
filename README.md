@@ -77,7 +77,7 @@ Carolyn Lam
   ![checkout_page](static/images/checkout_required.png)
 
   ***Checkout Page (payment checkout using STRIPE API)***
-  ![checkout_page](static/images/checkout_payment.png)
+  ![checkout_page](static/images/checkout_payment1.png)
 
   ***Payment charge shows up in Stripe Account***
   ![checkout_page](static/images/stripe_charge.png)
