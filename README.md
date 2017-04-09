@@ -5,7 +5,7 @@ create an e-commerce site implementing angular on the front end and flask on the
 
 ### Live Demo:
 
-[Bobblehead E-Commerce Site] (http://wobblybobbly.org/)
+[Bobblehead E-Commerce Site](http://wobblybobbly.org/)
 
 ### Languages used:
 
