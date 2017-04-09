@@ -280,7 +280,7 @@ Along with using cookies, using rootScope to create global variables also helped
 
   * Below shows a snippet of app.factory dealing with cookies and rootScope
 
-  ```
+```
   app.factory("EC_Factory", function($http, $cookies, $rootScope) {
 
     // create a service object that stores all the methods
@@ -308,7 +308,7 @@ Along with using cookies, using rootScope to create global variables also helped
       $rootScope.authToken = null;
       $rootScope.user_info = null;
     }
-    ```
+```
 
 
 ### What To Do Next:
